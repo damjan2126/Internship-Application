@@ -32,6 +32,7 @@ namespace Inversion_of_Control
             services.AddScoped<ICandidateRepository, CandidateRepository>();
             services.AddScoped<ICandidateService, CandidateService>();
             services.AddScoped<ISkillRepository, SkillRepository>();
+            services.AddScoped<ISkillService, SkillService>();
         }
     }
 }

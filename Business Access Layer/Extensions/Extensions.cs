@@ -22,5 +22,13 @@ namespace Business_Access_Layer.Extensions
                 
             };
         }
+
+        public static SkillDTO AsDTO(this Skill skill)
+        {
+            return new SkillDTO
+            {
+                Name = skill.Name
+            };
+        }
     }
 }
