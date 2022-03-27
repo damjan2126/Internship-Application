@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data_Access_Layer.DTOs
+namespace Common.Entities
 {
-    public class CandidateDTO
+    public record Candidate
     {
         public Guid Id { get; init; }
 
-        public string FirstName { get; init; }
-
-        public string LastName { get; init; }
+        public string FullName { get; init; }
 
         public DateTime DateOfBirth { get; init; }
 
@@ -20,6 +18,7 @@ namespace Data_Access_Layer.DTOs
 
         public string Email { get; init; }
 
-        public int SkillId { get; init; }
+        public int SkillsId { get; init; }
+
     }
 }

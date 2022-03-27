@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data_Access_Layer.DTOs
+namespace Common.Entities
 {
-    public class UpdateSkillDTO
+    public record Skill
     {
+        public int Id { get; init; }
+
         public string Name { get; init; }
     }
 }

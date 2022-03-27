@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data_Access_Layer.DTOs
+namespace Common.DTOs
 {
-    internal class CreateCandidateDTO
+    public class UpdateCandidateDTO
     {
-        public string FirstName { get; init; }
-
-        public string LastName { get; init; }
+        public string FullName { get; init; }
 
         public DateTime DateOfBirth { get; init; }
 
@@ -19,5 +17,6 @@ namespace Data_Access_Layer.DTOs
         public string Email { get; init; }
 
         public int SkillId { get; init; }
+
     }
 }

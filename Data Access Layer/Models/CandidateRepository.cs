@@ -1,4 +1,5 @@
-﻿using Data_Access_Layer.Contracts;
+﻿using Common.Entities;
+using Data_Access_Layer.Contracts;
 using Data_Access_Layer.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -27,9 +28,9 @@ namespace Data_Access_Layer.Models
 
         public async Task DeleteCandidate(Guid id)
         {
-           var result = await _repository.Candidates.FirstOrDefaultAsync(e => e.Id == id);
+            var result = await _repository.Candidates.FirstOrDefaultAsync(e => e.Id == id);
 
-            if(result != null)
+            if (result != null)
             {
                 _repository.Candidates.Remove(result);
                 await _repository.SaveChangesAsync();
@@ -38,12 +39,12 @@ namespace Data_Access_Layer.Models
 
         public async Task<IEnumerable<Candidate>> GetAllCandidates()
         {
-            return await _repository.Candidates.ToListAsync();
+            return  await _repository.Candidates.ToListAsync();
         }
 
         public async Task<Candidate> GetCandidateById(Guid id)
         {
-            return await _repository.Candidates.Include(e => e.SkillsId).FirstOrDefaultAsync(e => e.Id==id);
+            return await _repository.Candidates.Include(e => e.SkillsId).FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<IEnumerable<Candidate>> SearchByName(string name)

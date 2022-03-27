@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data_Access_Layer.Models
+namespace Common.DTOs
 {
-    public record Skill
+    public class SkillDTO
     {
         public int Id { get; init; }
 
-        public string? Name { get; init; }
+        public string Name { get; init; }
     }
 }

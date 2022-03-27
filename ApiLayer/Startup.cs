@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Inversion_of_Control;
 
 namespace ApiLayer
 {
@@ -30,15 +31,18 @@ namespace ApiLayer
         {
 
             services.AddControllers();
+
+            DependencyInjection dependencyInjection = new(Configuration);
+            dependencyInjection.InjectDependencies(services);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiLayer", Version = "v1" });
             });
 
-            services.AddDbContext<DataContext>(options => 
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
+           
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

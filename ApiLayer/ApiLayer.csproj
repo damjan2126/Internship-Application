@@ -19,11 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Business Access Layer\Business Access Layer.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Inversion of Control\Inversion of Control.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Business_Access_Layer</RootNamespace>
+    <RootNamespace>Inversion_of_Control</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Business Access Layer\Business Access Layer.csproj" />
     <ProjectReference Include="..\Data Access Layer\Data Access Layer.csproj" />
   </ItemGroup>
 

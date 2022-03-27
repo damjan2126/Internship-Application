@@ -1,4 +1,5 @@
-﻿using Data_Access_Layer.Contracts;
+﻿using Common.Entities;
+using Data_Access_Layer.Contracts;
 using Data_Access_Layer.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
