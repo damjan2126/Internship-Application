@@ -1,24 +1,26 @@
-﻿using System;
-using Common.DTOs;
+﻿using Business_Access_Layer.Models;
+using Data_Access_Layer.Entities;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Business_Access_Layer.Services.IServices
 {
     public interface ICandidateService
     {
-        Task<CandidateDTO> AddCandidate(CreateCandidateDTO createCandidateDTO);
+        Task<Guid?> CreateCandidate(CandidateModel model);
+        
+        Task<CandidateModel> GetById(Guid id);
 
-        Task RemoveCandidate(CandidateDTO candidateDTO);
+        Task<IEnumerable<CandidateModel>> GetAll();
 
-        Task<IEnumerable<CandidateDTO>> GetCandidatesByName(string name);
+        Task<CandidateModel> GetByName(string name);
 
-        Task UpdateCandidate(CandidateDTO candidateDTO, UpdateCandidateDTO updateCandidateDTO);
+        Task<Candidate> UpdateCandidate(Guid id, CandidateModel model);
 
-        Task<IEnumerable<CandidateDTO>> GetAllCandidatesBySkill(int id);
+        Task<bool> DeleteCandidate(Guid id);
 
-        Task<IEnumerable<CandidateDTO>> GetAllCandidates();
+
+
     }
 }

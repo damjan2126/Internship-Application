@@ -1,12 +1,10 @@
-﻿using Business_Access_Layer.Extensions;
+﻿using AutoMapper;
+using Business_Access_Layer.Models;
 using Business_Access_Layer.Services.IServices;
-using Common.DTOs;
-using Common.Entities;
 using Data_Access_Layer.Contracts;
+using Data_Access_Layer.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Business_Access_Layer.Services
@@ -14,109 +12,128 @@ namespace Business_Access_Layer.Services
     public class CandidateService : ICandidateService
     {
         private readonly ICandidateRepository _repository;
+        private readonly IMapper _mapper;
 
-        public CandidateService(ICandidateRepository repository)
+        public CandidateService()
+        {
+        }
+
+        public CandidateService(ICandidateRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-
-        public async Task<CandidateDTO> AddCandidate(CreateCandidateDTO createCandidateDTO)
+        public async Task<Guid?> CreateCandidate(CandidateModel model)
         {
-            Candidate canditate = new()
+
+            try
             {
-                Id = Guid.NewGuid(),
-                FullName = createCandidateDTO.FullName,
-                DateOfBirth = createCandidateDTO.DateOfBirth,
-                ContactNumber = createCandidateDTO.ContactNumber,
-                Email = createCandidateDTO.Email,
-                SkillsId = createCandidateDTO.SkillsId
-            };          
+                var candidate = _mapper.Map<Candidate>(model);
+                var existis = await _repository.GetByEmail(model.Email);
 
-           await _repository.CreateCandidate(canditate);
-            return canditate.AsDTO();
+                if (existis != null) throw new Exception(); // implement custom exception
 
+                var created = await _repository.CreateCandidate(candidate);
+
+                return created.Id;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
-        public async Task<IEnumerable<CandidateDTO>> GetAllCandidates()
+        public async Task<bool> DeleteCandidate(Guid id)
+        {
+            try
+            {
+                var candidate = await _repository.GetCandidateById(id);
+
+                if(candidate == null) throw new Exception();
+
+                await _repository.DeleteCandidate(candidate);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<CandidateModel>> GetAll()
         {
             var candidates = await _repository.GetAllCandidates();
-            List<CandidateDTO> candidatesList = new List<CandidateDTO>();
-            foreach (var candidate in candidates)
-            {
-                candidatesList.Add(candidate.AsDTO()); 
-            }
-            return candidatesList;
-        }
 
-        public async Task<IEnumerable<CandidateDTO>> GetAllCandidatesBySkill(int id)
-        {
-            var candidates =  await _repository.GetAllCandidates();
-            List<CandidateDTO> candidatesList = new List<CandidateDTO>();
-            foreach(var candidate in candidates)
-            {
-                if(candidate.SkillsId == id)
-                {
-                    candidatesList.Add(candidate.AsDTO());
-                }
-            }
-
-            return candidatesList;
-        }
-
-        public async Task<IEnumerable<CandidateDTO>> GetCandidatesByName(string name)
-        {
-            if (name == null)
-                return null;
-
-            var candidates = await _repository.SearchByName(name);
-
-            List<CandidateDTO> candidatesList = new List<CandidateDTO>();
-            foreach (var candidate in candidates)
-            {
-                if (candidate.FullName.Contains(name))
-                {
-                    candidatesList.Add(candidate.AsDTO());
-                }
-            }
-
-
-            return candidatesList;
-        }
-
-
-        public async Task RemoveCandidate(CandidateDTO candidateDTO)
-        {
-            var candidates = await _repository.GetAllCandidates();
+            List<CandidateModel> result = new List<CandidateModel>();
 
             foreach(var candidate in candidates)
             {
-                if(candidate.AsDTO().ContactNumber == candidateDTO.ContactNumber)
-                {
-                    await _repository.DeleteCandidate(candidate.Id);
-                }
+                result.Add((CandidateModel)_mapper.Map<CandidateModel>(candidate));
+            }
+            return result;
+            
+        }
+
+        public async Task<CandidateModel> GetById(Guid id)
+        {
+            try
+            {
+                var candidate = await _repository.GetCandidateById(id);
+
+                if (candidate == null) throw new Exception();
+
+                var model = _mapper.Map<CandidateModel>(candidate);
+
+                return model;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+
+        public async Task<CandidateModel> GetByName(string name)
+        {
+            try
+            {
+                var candidate = await _repository.GetByName(name);
+
+                if (candidate == null) throw new Exception();
+
+                var model = _mapper.Map<CandidateModel>(candidate);
+
+                return model;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
-        public async Task UpdateCandidate(CandidateDTO candidateDTO, UpdateCandidateDTO updateCandidateDTO)
+        public async Task<Candidate> UpdateCandidate(Guid id, CandidateModel model)
         {
-            var candidates = await _repository.GetAllCandidates();
-
-            foreach (var candidate in candidates)
+            try
             {
-                if (candidate.AsDTO().ContactNumber == candidateDTO.ContactNumber)
-                {
-                    Candidate updatedCandidate = candidate with
-                    {
-                        FullName = updateCandidateDTO.FullName,
-                        DateOfBirth = updateCandidateDTO.DateOfBirth,
-                        ContactNumber = updateCandidateDTO.ContactNumber,
-                        Email = updateCandidateDTO.Email,
-                        SkillsId = updateCandidateDTO.SkillId
-                    };
+                var candidate = await _repository.GetCandidateById(id);         
 
-                    await _repository.UpdateCandidate(updatedCandidate);
-                }
+                if (candidate == null) throw new Exception();
+
+                candidate = _mapper.Map<Candidate>(model) with
+                {
+                    Id = id
+                };
+
+                await _repository.UpdateCandidate(candidate);
+
+                return candidate;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

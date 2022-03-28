@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.Entities
+namespace Data_Access_Layer.Entities
 {
     public record Skill
     {
-        public int Id { get; init; }
+        public Guid Id { get; init; }
 
         public string Name { get; init; }
     }

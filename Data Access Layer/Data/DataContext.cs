@@ -1,4 +1,4 @@
-﻿using Common.Entities;
+﻿using Data_Access_Layer.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,30 +16,30 @@ namespace Data_Access_Layer.Data
 
         public DbSet<Skill> Skills { get; set; }
 
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-
-
             modelBuilder.Entity<Skill>().HasData(
                 new Skill
                 {
-                    Id = 1,
+                    Id = Guid.NewGuid(),
                     Name = "Skill A"
                 });
 
             modelBuilder.Entity<Skill>().HasData(
                 new Skill
                 {
-                    Id = 2,
+                    Id = Guid.NewGuid(),
                     Name = "Skill B"
                 });
 
             modelBuilder.Entity<Skill>().HasData(
                 new Skill
                 {
-                    Id = 3,
+                    Id = Guid.NewGuid(),
                     Name = "Skill C"
                 });
 
@@ -50,8 +50,7 @@ namespace Data_Access_Layer.Data
                      FullName = "John Johnson",
                      ContactNumber = "1",
                      DateOfBirth = DateTime.UtcNow,
-                     Email = "email",
-                     SkillsId = 1
+                     Email = "email"
                  }
                 ) ;
 
@@ -62,8 +61,7 @@ namespace Data_Access_Layer.Data
                     FullName = "Jack Jackson",
                     ContactNumber = "2",
                     DateOfBirth = DateTime.UtcNow,
-                    Email = "email2",
-                    SkillsId = 2
+                    Email = "email2"
                 }
                );
 
@@ -74,8 +72,7 @@ namespace Data_Access_Layer.Data
                     FullName = "Johnny Joe",
                     ContactNumber = "3",
                     DateOfBirth = DateTime.UtcNow,
-                    Email = "email3",
-                    SkillsId = 3
+                    Email = "email3"
                 }
                );
         }

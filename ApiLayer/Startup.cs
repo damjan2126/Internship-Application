@@ -13,7 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Inversion_of_Control;
+using Business_Access_Layer.Extensions;
+using Business_Access_Layer.Mappings;
+using ApiLayer.Mappings;
 
 namespace ApiLayer
 {
@@ -34,6 +36,7 @@ namespace ApiLayer
 
             DependencyInjection dependencyInjection = new(Configuration);
             dependencyInjection.InjectDependencies(services);
+            services.AddAutoMapper(typeof(AutoMapperBALProfiles),typeof(AutoMapperAPIProfiles));
 
             services.AddSwaggerGen(c =>
             {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.Entities
+namespace Data_Access_Layer.Entities
 {
     public record Candidate
     {
@@ -17,8 +17,6 @@ namespace Common.Entities
         public string ContactNumber { get; init; }
 
         public string Email { get; init; }
-
-        public int SkillsId { get; init; }
 
     }
 }

@@ -1,59 +1,111 @@
-﻿using Business_Access_Layer.Extensions;
+﻿using AutoMapper;
+using Business_Access_Layer.Models;
 using Business_Access_Layer.Services.IServices;
-using Common.DTOs;
-using Common.Entities;
 using Data_Access_Layer.Contracts;
+using Data_Access_Layer.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Business_Access_Layer.Services
 {
     public class SkillService : ISkillService
     {
-        private static int id = 3;
+      
         private readonly ISkillRepository _repository;
+        private readonly IMapper _mapper;
 
-        public SkillService(ISkillRepository repository)
+        public SkillService(ISkillRepository repository, IMapper mapper)
         {
             _repository = repository;
-        }
-        public async Task<SkillDTO> CreateSkill(CreateSkillDTO skillDTO)
-        {
-            Skill skill = new()
-            {
-                Id = ++id,
-                Name = skillDTO.Name,
-            };
-
-            await _repository.CreateSkill(skill);
-            return skill.AsDTO();
+            _mapper = mapper;
         }
 
-        public async Task DeleteSkill(SkillDTO skillDTO)
+        public async Task<Guid> Create(SkillModel skill)
         {
-            var skills = await _repository.GetAllSkills();
-
-            foreach (var skill in skills)
+            try
             {
-                if (skill.AsDTO().Name.Contains(skillDTO.Name))
-                {
-                    await _repository.DeleteSkill(skill.Id);
-                }
+                var skillToCreate = _mapper.Map<Skill>(skill);
+                var existis = await _repository.GetByName(skill.Name);
+
+                if (existis != null) throw new Exception(); // implement custom exception
+
+                var created = await _repository.Create(skillToCreate);
+
+                return created.Id;
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 
-        public async Task<IEnumerable<SkillDTO>> GetAllSkills()
+        public async Task<bool> Delete(Guid id)
         {
-            var skills = await _repository.GetAllSkills();
-            List<SkillDTO> skillList = new List<SkillDTO>();
+            try
+            {
+                var skillToDelete = await _repository.GetById(id);
+
+                if (skillToDelete == null) throw new Exception();
+
+                await _repository.Delete(skillToDelete);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<SkillModel>> GetAll()
+        {
+            var skills = await _repository.GetAll();
+
+            var result = new List<SkillModel>();
+
             foreach (var skill in skills)
             {
-                skillList.Add(skill.AsDTO());
+                result.Add(_mapper.Map<SkillModel>(skill));
             }
-            return skillList;
+            return result;
+        }
+
+        public async Task<SkillModel> GetById(Guid Id)
+        {
+            try
+            {
+                var skill = await _repository.GetById(Id);
+
+                if (skill == null) throw new Exception();
+
+                var model = _mapper.Map<SkillModel>(skill);
+
+                return model;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<SkillModel> GetByName(string name)
+        {
+            try
+            {
+                var skill = await _repository.GetByName(name);
+
+                if (skill == null) throw new Exception();
+
+                var model = _mapper.Map<SkillModel>(skill);
+
+                return model;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

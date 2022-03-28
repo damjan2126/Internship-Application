@@ -1,4 +1,4 @@
-﻿using Common.Entities;
+﻿using Data_Access_Layer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +17,11 @@ namespace Data_Access_Layer.Contracts
 
         Task<Candidate> UpdateCandidate(Candidate candidate);
 
-        Task DeleteCandidate(Guid id);
+        Task<int> DeleteCandidate(Candidate candidate);
 
-        Task<IEnumerable<Candidate>> SearchByName(string name);
+        Task<Candidate> GetByName(string name);
+
+        Task<Candidate> GetByEmail(string email);
 
     }
 }

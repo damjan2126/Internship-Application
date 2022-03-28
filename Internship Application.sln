@@ -9,10 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business Access Layer", "Bu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data Access Layer", "Data Access Layer\Data Access Layer.csproj", "{C9004B84-81E2-4527-84D0-D4BD904C1236}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{597F000E-2E36-4CA1-B157-A599E2AE803C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inversion of Control", "Inversion of Control\Inversion of Control.csproj", "{CA98B356-16B0-4D71-A55B-976B65542D79}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,14 +27,6 @@ Global
 		{C9004B84-81E2-4527-84D0-D4BD904C1236}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9004B84-81E2-4527-84D0-D4BD904C1236}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9004B84-81E2-4527-84D0-D4BD904C1236}.Release|Any CPU.Build.0 = Release|Any CPU
-		{597F000E-2E36-4CA1-B157-A599E2AE803C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{597F000E-2E36-4CA1-B157-A599E2AE803C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{597F000E-2E36-4CA1-B157-A599E2AE803C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{597F000E-2E36-4CA1-B157-A599E2AE803C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA98B356-16B0-4D71-A55B-976B65542D79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA98B356-16B0-4D71-A55B-976B65542D79}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA98B356-16B0-4D71-A55B-976B65542D79}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA98B356-16B0-4D71-A55B-976B65542D79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

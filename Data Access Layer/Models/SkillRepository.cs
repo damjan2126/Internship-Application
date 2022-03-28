@@ -1,62 +1,48 @@
-﻿using Common.Entities;
-using Data_Access_Layer.Contracts;
+﻿using Data_Access_Layer.Contracts;
 using Data_Access_Layer.Data;
+using Data_Access_Layer.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Models
 {
     public class SkillRepository : ISkillRepository
     {
-        private readonly DataContext _repository;
+        private readonly DataContext _context;
 
-        public SkillRepository(DataContext repository)
+        public SkillRepository(DataContext context)
         {
-            _repository = repository;
+            _context = context;
         }
 
-        public async Task<Skill> CreateSkill(Skill skill)
+        public async Task<Skill> Create(Skill skill)
         {
-            var result = await _repository.Skills.AddAsync(skill);
-            await _repository.SaveChangesAsync();
-            return result.Entity;
+            await _context.AddAsync(skill);
+            await _context.SaveChangesAsync();
+            return skill;
         }
 
-        public async Task DeleteSkill(int id)
+        public async Task<int> Delete(Skill skill)
         {
-            var result = await _repository.Skills.FirstOrDefaultAsync(e => e.Id == id);
-
-            if (result != null)
-            {
-                _repository.Skills.Remove(result);
-                await _repository.SaveChangesAsync();
-            }
+            var deletedSkill = _context.Remove(skill);
+            return await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Skill>> GetAllSkills()
+        public async Task<IEnumerable<Skill>> GetAll()
         {
-            return await _repository.Skills.ToListAsync();
+            return await _context.Skills.AsNoTracking().ToListAsync();
         }
 
-        public async Task<Skill> GetSkillById(int skillId)
+        public async Task<Skill> GetById(Guid id)
         {
-            return await _repository.Skills.FirstOrDefaultAsync(e => e.Id == skillId);
+            return await _context.Skills.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<Skill> SearchByName(string name)
+        public async Task<Skill> GetByName(string name)
         {
-            IQueryable<Skill> query = _repository.Skills;
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                query = query.Where(e => e.Name.Contains(name));
-            }
-
-            return await query.FirstOrDefaultAsync();
+            return await _context.Skills.AsNoTracking().FirstOrDefaultAsync(c => c.Name == name);
         }
     }
 }

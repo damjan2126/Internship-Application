@@ -6,13 +6,10 @@ using Data_Access_Layer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
+using Business_Access_Layer.Mappings;
 
-namespace Inversion_of_Control
+namespace Business_Access_Layer.Extensions
 {
     public class DependencyInjection
     {
@@ -29,6 +26,7 @@ namespace Inversion_of_Control
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            
             services.AddScoped<ICandidateRepository, CandidateRepository>();
             services.AddScoped<ICandidateService, CandidateService>();
             services.AddScoped<ISkillRepository, SkillRepository>();

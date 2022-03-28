@@ -1,18 +1,21 @@
-﻿using Common.DTOs;
+﻿using Business_Access_Layer.Models;
+using Data_Access_Layer.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Business_Access_Layer.Services.IServices
 {
     public interface ISkillService
     {
-        Task<SkillDTO> CreateSkill (CreateSkillDTO skillDTO);
-        
-        Task DeleteSkill(SkillDTO skillDTO);
+        Task<IEnumerable<SkillModel>> GetAll();
 
-        Task<IEnumerable<SkillDTO>> GetAllSkills();
+        Task<SkillModel> GetById(Guid Id);
+
+        Task<Guid> Create(SkillModel skill);
+
+        Task<bool> Delete(Guid id);
+
+        Task<SkillModel> GetByName(string name);
     }
 }

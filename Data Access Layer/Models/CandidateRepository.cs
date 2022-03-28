@@ -1,6 +1,6 @@
-﻿using Common.Entities;
-using Data_Access_Layer.Contracts;
+﻿using Data_Access_Layer.Contracts;
 using Data_Access_Layer.Data;
+using Data_Access_Layer.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,75 +12,51 @@ namespace Data_Access_Layer.Models
 {
     public class CandidateRepository : ICandidateRepository
     {
-        private readonly DataContext _repository;
+        private readonly DataContext _context;
 
         public CandidateRepository(DataContext repository)
         {
-            _repository = repository;
+            _context = repository;
         }
 
         public async Task<Candidate> CreateCandidate(Candidate candidate)
         {
-            var result = await _repository.Candidates.AddAsync(candidate);
-            await _repository.SaveChangesAsync();
-            return result.Entity;
+            await _context.AddAsync(candidate);
+            await _context.SaveChangesAsync();
+            return candidate;
         }
 
-        public async Task DeleteCandidate(Guid id)
+        public async Task<int> DeleteCandidate(Candidate candidate)
         {
-            var result = await _repository.Candidates.FirstOrDefaultAsync(e => e.Id == id);
-
-            if (result != null)
-            {
-                _repository.Candidates.Remove(result);
-                await _repository.SaveChangesAsync();
-            }
+            var deletedCandidate = _context.Remove(candidate);
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Candidate>> GetAllCandidates()
         {
-            return  await _repository.Candidates.ToListAsync();
+            return await _context.Candidates.AsNoTracking().ToListAsync();
         }
 
         public async Task<Candidate> GetCandidateById(Guid id)
         {
-            return await _repository.Candidates.Include(e => e.SkillsId).FirstOrDefaultAsync(e => e.Id == id);
+            return await _context.Candidates.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<IEnumerable<Candidate>> SearchByName(string name)
+        public async Task<Candidate> GetByEmail(string email)
         {
-            IQueryable<Candidate> query = _repository.Candidates;
+            return await _context.Candidates.AsNoTracking().FirstOrDefaultAsync<Candidate>(c => c.Email == email); 
+        }
 
-            if (!string.IsNullOrEmpty(name))
-            {
-                query = query.Where(e => e.FullName.Contains(name));
-            }
-
-            return await query.ToListAsync();
+        public async Task<Candidate> GetByName(string name)
+        {
+            return await _context.Candidates.AsNoTracking().FirstOrDefaultAsync(c => c.FullName == name);
         }
 
         public async Task<Candidate> UpdateCandidate(Candidate candidate)
         {
-            var result = await _repository.Candidates.FirstOrDefaultAsync(e => e.Id == candidate.Id);
-
-            if (result is null)
-            {
-                return null;
-
-            }
-
-            Candidate updatedCandidate = result with
-            {
-                FullName = candidate.FullName,
-                SkillsId = candidate.SkillsId,
-                ContactNumber = candidate.ContactNumber,
-                Email = candidate.Email,
-                DateOfBirth = candidate.DateOfBirth
-            };
-
-            await _repository.Candidates.AddAsync(updatedCandidate);
-            return updatedCandidate;
-
+            var updatedCandidate = _context.Candidates.Update(candidate);
+            await _context.SaveChangesAsync();
+            return updatedCandidate.Entity;
         }
     }
 }

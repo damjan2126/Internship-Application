@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data_Access_Layer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220327091106_InitalCreate")]
+    [Migration("20220328122001_InitalCreate")]
     partial class InitalCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace Data_Access_Layer.Migrations
                 .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Data_Access_Layer.Models.Candidate", b =>
+            modelBuilder.Entity("Data_Access_Layer.Entities.Candidate", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,7 +30,7 @@ namespace Data_Access_Layer.Migrations
                     b.Property<string>("ContactNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DateOfBirth")
+                    b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -39,9 +39,6 @@ namespace Data_Access_Layer.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SkillsId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Candidates");
@@ -49,39 +46,35 @@ namespace Data_Access_Layer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7be369da-0d1b-4544-b3cb-402828b5c95c"),
+                            Id = new Guid("7a14b93c-398d-49b1-9930-e4fa640ab03e"),
                             ContactNumber = "1",
-                            DateOfBirth = new DateTime(2022, 3, 27, 9, 11, 5, 668, DateTimeKind.Utc).AddTicks(6761),
+                            DateOfBirth = new DateTime(2022, 3, 28, 12, 20, 0, 679, DateTimeKind.Utc).AddTicks(7068),
                             Email = "email",
-                            FullName = "John Johnson",
-                            SkillsId = 1
+                            FullName = "John Johnson"
                         },
                         new
                         {
-                            Id = new Guid("c793af7f-2a3c-4cd6-bff8-48805f7b8b06"),
+                            Id = new Guid("1a744aea-36b8-4504-84d9-fd8420f0fb4e"),
                             ContactNumber = "2",
-                            DateOfBirth = new DateTime(2022, 3, 27, 9, 11, 5, 668, DateTimeKind.Utc).AddTicks(8000),
+                            DateOfBirth = new DateTime(2022, 3, 28, 12, 20, 0, 679, DateTimeKind.Utc).AddTicks(7696),
                             Email = "email2",
-                            FullName = "Jack Jackson",
-                            SkillsId = 2
+                            FullName = "Jack Jackson"
                         },
                         new
                         {
-                            Id = new Guid("f5aa3442-b05e-4dda-8e02-56a1ff778e76"),
+                            Id = new Guid("16fdfc19-52ad-48ec-b175-b4ea66cc2a5e"),
                             ContactNumber = "3",
-                            DateOfBirth = new DateTime(2022, 3, 27, 9, 11, 5, 668, DateTimeKind.Utc).AddTicks(8023),
+                            DateOfBirth = new DateTime(2022, 3, 28, 12, 20, 0, 679, DateTimeKind.Utc).AddTicks(7717),
                             Email = "email3",
-                            FullName = "Johnny Joe",
-                            SkillsId = 3
+                            FullName = "Johnny Joe"
                         });
                 });
 
-            modelBuilder.Entity("Data_Access_Layer.Models.Skill", b =>
+            modelBuilder.Entity("Data_Access_Layer.Entities.Skill", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -93,17 +86,17 @@ namespace Data_Access_Layer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = new Guid("01e9345f-461c-4e3d-b467-788436e149b7"),
                             Name = "Skill A"
                         },
                         new
                         {
-                            Id = 2,
+                            Id = new Guid("9b79cd08-7333-44d4-a7bb-0d0fcfe2e30e"),
                             Name = "Skill B"
                         },
                         new
                         {
-                            Id = 3,
+                            Id = new Guid("a306ad86-110b-46ed-8b48-91b37b1339b7"),
                             Name = "Skill C"
                         });
                 });

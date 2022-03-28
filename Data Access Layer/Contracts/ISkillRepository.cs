@@ -1,4 +1,4 @@
-﻿using Common.Entities;
+﻿using Data_Access_Layer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +9,14 @@ namespace Data_Access_Layer.Contracts
 {
     public interface ISkillRepository
     {
-        Task<IEnumerable<Skill>> GetAllSkills();
+        Task<IEnumerable<Skill>> GetAll();
 
-        Task<Skill> GetSkillById(int skillId);
+        Task<Skill> GetById(Guid Id);
 
-        Task<Skill> CreateSkill(Skill skill);
+        Task<Skill> Create(Skill skill);
 
-        Task DeleteSkill(int id);
+        Task<int> Delete(Skill skill);
 
-        Task<Skill> SearchByName(string name);
+        Task<Skill> GetByName(string name);
     }
 }
