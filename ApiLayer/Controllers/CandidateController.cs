@@ -22,7 +22,7 @@ namespace ApiLayer.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("getallcandidates")]
         public async Task<IActionResult> GetAll()
         {
             var modelList = await _candidateService.GetAll();
@@ -36,7 +36,7 @@ namespace ApiLayer.Controllers
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [HttpGet("{id}")]
+        [HttpGet("getcandidatebyid/{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var model = await _candidateService.GetById(id);
@@ -46,7 +46,7 @@ namespace ApiLayer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [HttpPost]
+        [HttpPost("createcandidate")]
         public async Task<IActionResult> Create([FromBody] CandidateCreateRequest createReqBody)
         {
             var candidateModel = _mapper.Map<CandidateModel>(createReqBody);
@@ -57,7 +57,7 @@ namespace ApiLayer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [HttpDelete("{id}")]
+        [HttpDelete("deletecandidate/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var result = await _candidateService.DeleteCandidate(id);
@@ -67,7 +67,7 @@ namespace ApiLayer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [HttpPut("{id}")]
+        [HttpPut("updatecandidate/{id}")]
         public async Task<IActionResult> UpdateAccount([FromRoute] Guid id, [FromBody] CandidateUpdateRequest candidateUpdateRequest)
         {
             var currentCandidate = await _candidateService.GetById(id);

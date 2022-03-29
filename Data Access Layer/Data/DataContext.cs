@@ -16,6 +16,8 @@ namespace Data_Access_Layer.Data
 
         public DbSet<Skill> Skills { get; set; }
 
+        //public DbSet<CandidateSkills> CandidateSkills { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
