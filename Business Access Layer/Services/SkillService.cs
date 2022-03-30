@@ -25,7 +25,7 @@ namespace Business_Access_Layer.Services
         {
 
             var skillToCreate = _mapper.Map<Skill>(skill);
-            var existis = await _repository.GetByName(skill.Name);
+            var existis = await _repository.Find(c => c.Name.Equals(skill.Name));
 
             if (existis != null) return null;
 
@@ -74,7 +74,7 @@ namespace Business_Access_Layer.Services
         public async Task<SkillModel> GetByName(string name)
         {
 
-            var skill = await _repository.GetByName(name);
+            var skill = await _repository.Find(c => c.Name.Equals(name));
 
             if (skill == null) return null;
 
@@ -95,7 +95,7 @@ namespace Business_Access_Layer.Services
                     Id = id
             };
 
-            await _repository.Update(skill);
+            await _repository.Update(skill, id);
 
             return skill;
           

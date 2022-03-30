@@ -7,21 +7,9 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Contracts
 {
-    public interface ICandidateRepository
+    public interface ICandidateRepository : IGenericRepository<Candidate>
     {
-        Task<Candidate> GetById(Guid id);
-
-        Task<IEnumerable<Candidate>> GetAll();
-
-        Task<Candidate> Create(Candidate candidate);
-
-        Task<Candidate> Update(Candidate candidate);
-
-        Task<int> Delete(Candidate candidate);
-
-        Task<Candidate> GetByName(string name);
-
-        Task<Candidate> GetByEmail(string email);
+       
 
     }
 }

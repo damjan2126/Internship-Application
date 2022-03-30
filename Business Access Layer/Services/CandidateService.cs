@@ -27,9 +27,9 @@ namespace Business_Access_Layer.Services
         public async Task<Guid?> Create(CandidateModel model)
         {
             var candidate = _mapper.Map<Candidate>(model);
-            var existis = await _repository.GetByEmail(model.Email);
+            var existis = await _repository.Find(c => c.Email.Equals(model.Email));
 
-            if (existis != null) return null; ; // implement custom exception
+            if (existis != null) return null;
 
             var created = await _repository.Create(candidate);
 
@@ -84,7 +84,7 @@ namespace Business_Access_Layer.Services
         {
             try
             {
-                var candidate = await _repository.GetByName(name);
+                var candidate = await _repository.Find(c => c.FullName.Equals(name));
 
                 if (candidate == null) throw new Exception();
 
@@ -111,7 +111,7 @@ namespace Business_Access_Layer.Services
                     Id = id
                 };
 
-                await _repository.Update(candidate);
+                await _repository.Update(candidate, id);
 
                 return candidate;
             }

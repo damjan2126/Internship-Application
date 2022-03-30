@@ -7,18 +7,8 @@ using System.Threading.Tasks;
 
 namespace Data_Access_Layer.Contracts
 {
-    public interface ISkillRepository
+    public interface ISkillRepository : IGenericRepository<Skill>
     {
-        Task<IEnumerable<Skill>> GetAll();
-
-        Task<Skill> GetById(Guid Id);
-
-        Task<Skill> Create(Skill skill);
-
-        Task<int> Delete(Skill skill);
-
-        Task<Skill> Update(Skill skill);
-
-        Task<Skill> GetByName(string name);
+        
     }
 }
