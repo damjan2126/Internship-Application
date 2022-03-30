@@ -44,5 +44,12 @@ namespace Data_Access_Layer.Models
         {
             return await _context.Skills.AsNoTracking().FirstOrDefaultAsync(c => c.Name == name);
         }
+
+        public async Task<Skill> Update(Skill skill)
+        {
+                var updatedSkill = _context.Skills.Update(skill);
+                await _context.SaveChangesAsync();
+                return updatedSkill.Entity;
+        }
     }
 }

@@ -17,6 +17,8 @@ namespace Data_Access_Layer.Contracts
 
         Task<int> Delete(Skill skill);
 
+        Task<Skill> Update(Skill skill);
+
         Task<Skill> GetByName(string name);
     }
 }

@@ -12,9 +12,11 @@ namespace Business_Access_Layer.Services.IServices
 
         Task<SkillModel> GetById(Guid Id);
 
-        Task<Guid> Create(SkillModel skill);
+        Task<Guid?> Create(SkillModel skill);
 
         Task<bool> Delete(Guid id);
+
+        Task<Skill> Update(Guid id, SkillModel skill);
 
         Task<SkillModel> GetByName(string name);
     }

@@ -1,4 +1,4 @@
-﻿using ApiLayer.Models;
+﻿using ApiLayer.Models.CandidateModels;
 using AutoMapper;
 using Business_Access_Layer.Models;
 using Business_Access_Layer.Services.IServices;
@@ -21,8 +21,8 @@ namespace ApiLayer.Controllers
             _candidateService = candidateService;
         }
 
-
-        [HttpGet("getallcandidates")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [HttpGet("getall")]
         public async Task<IActionResult> GetAll()
         {
             var modelList = await _candidateService.GetAll();
@@ -36,45 +36,56 @@ namespace ApiLayer.Controllers
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [HttpGet("getcandidatebyid/{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [HttpGet("getbyid/{id}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var model = await _candidateService.GetById(id);
             var candidateResponse = _mapper.Map<CandidateResponse>(model);
-            return Ok(candidateResponse);
+            return model == null ? NotFound() : Ok(candidateResponse);
+        }
+
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [HttpGet("getbyid/{name}")]
+        public async Task<IActionResult> GetByName([FromRoute] String name)
+        {
+            var model = await _candidateService.GetByName(name);
+            var candidateResponse = _mapper.Map<CandidateResponse>(model);
+            return model == null ? NotFound() : Ok(candidateResponse);
         }
 
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [HttpPost("createcandidate")]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CandidateCreateRequest createReqBody)
         {
             var candidateModel = _mapper.Map<CandidateModel>(createReqBody);
-            var createdId = await _candidateService.CreateCandidate(candidateModel);
+            var createdId = await _candidateService.Create(candidateModel);
 
-            return createdId == null ? (IActionResult)BadRequest() : CreatedAtAction(nameof(GetById), new { id = "Guid" }, createdId);
+            return createdId == null ? BadRequest() : CreatedAtAction(nameof(GetById), new { id = "Guid" }, createdId);
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [HttpDelete("deletecandidate/{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var result = await _candidateService.DeleteCandidate(id);
+            var result = await _candidateService.Delete(id);
 
-            return result ? (IActionResult)Ok() : NotFound();
+            return result ? Ok() : NotFound();
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [HttpPut("updatecandidate/{id}")]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateAccount([FromRoute] Guid id, [FromBody] CandidateUpdateRequest candidateUpdateRequest)
         {
             var currentCandidate = await _candidateService.GetById(id);
             
             if(currentCandidate == null) return NotFound();
 
-            return Ok(await _candidateService.UpdateCandidate(id, _mapper.Map<CandidateModel> (candidateUpdateRequest)));
+            return Ok(await _candidateService.Update(id, _mapper.Map<CandidateModel> (candidateUpdateRequest)));
 
             
 

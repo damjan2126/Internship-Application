@@ -24,48 +24,32 @@ namespace Business_Access_Layer.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid?> CreateCandidate(CandidateModel model)
+        public async Task<Guid?> Create(CandidateModel model)
         {
+            var candidate = _mapper.Map<Candidate>(model);
+            var existis = await _repository.GetByEmail(model.Email);
 
-            try
-            {
-                var candidate = _mapper.Map<Candidate>(model);
-                var existis = await _repository.GetByEmail(model.Email);
+            if (existis != null) return null; ; // implement custom exception
 
-                if (existis != null) throw new Exception(); // implement custom exception
+            var created = await _repository.Create(candidate);
 
-                var created = await _repository.CreateCandidate(candidate);
-
-                return created.Id;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            return created.Id;
         }
 
-        public async Task<bool> DeleteCandidate(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            try
-            {
-                var candidate = await _repository.GetCandidateById(id);
+            var candidate = await _repository.GetById(id);
 
-                if(candidate == null) throw new Exception();
+            if(candidate == null) return false;
 
-                await _repository.DeleteCandidate(candidate);
+            await _repository.Delete(candidate);
 
-                return true;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return true;
         }
 
         public async Task<IEnumerable<CandidateModel>> GetAll()
         {
-            var candidates = await _repository.GetAllCandidates();
+            var candidates = await _repository.GetAll();
 
             List<CandidateModel> result = new List<CandidateModel>();
 
@@ -81,7 +65,7 @@ namespace Business_Access_Layer.Services
         {
             try
             {
-                var candidate = await _repository.GetCandidateById(id);
+                var candidate = await _repository.GetById(id);
 
                 if (candidate == null) throw new Exception();
 
@@ -114,11 +98,11 @@ namespace Business_Access_Layer.Services
             }
         }
 
-        public async Task<Candidate> UpdateCandidate(Guid id, CandidateModel model)
+        public async Task<Candidate> Update(Guid id, CandidateModel model)
         {
             try
             {
-                var candidate = await _repository.GetCandidateById(id);         
+                var candidate = await _repository.GetById(id);         
 
                 if (candidate == null) throw new Exception();
 
@@ -127,7 +111,7 @@ namespace Business_Access_Layer.Services
                     Id = id
                 };
 
-                await _repository.UpdateCandidate(candidate);
+                await _repository.Update(candidate);
 
                 return candidate;
             }

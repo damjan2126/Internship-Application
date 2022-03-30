@@ -8,7 +8,7 @@ namespace Business_Access_Layer.Services.IServices
 {
     public interface ICandidateService
     {
-        Task<Guid?> CreateCandidate(CandidateModel model);
+        Task<Guid?> Create(CandidateModel model);
         
         Task<CandidateModel> GetById(Guid id);
 
@@ -16,9 +16,9 @@ namespace Business_Access_Layer.Services.IServices
 
         Task<CandidateModel> GetByName(string name);
 
-        Task<Candidate> UpdateCandidate(Guid id, CandidateModel model);
+        Task<Candidate> Update(Guid id, CandidateModel model);
 
-        Task<bool> DeleteCandidate(Guid id);
+        Task<bool> Delete(Guid id);
 
 
 

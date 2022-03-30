@@ -9,15 +9,15 @@ namespace Data_Access_Layer.Contracts
 {
     public interface ICandidateRepository
     {
-        Task<Candidate> GetCandidateById(Guid id);
+        Task<Candidate> GetById(Guid id);
 
-        Task<IEnumerable<Candidate>> GetAllCandidates();
+        Task<IEnumerable<Candidate>> GetAll();
 
-        Task<Candidate> CreateCandidate(Candidate candidate);
+        Task<Candidate> Create(Candidate candidate);
 
-        Task<Candidate> UpdateCandidate(Candidate candidate);
+        Task<Candidate> Update(Candidate candidate);
 
-        Task<int> DeleteCandidate(Candidate candidate);
+        Task<int> Delete(Candidate candidate);
 
         Task<Candidate> GetByName(string name);
 

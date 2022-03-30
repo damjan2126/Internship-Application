@@ -21,42 +21,29 @@ namespace Business_Access_Layer.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid> Create(SkillModel skill)
+        public async Task<Guid?> Create(SkillModel skill)
         {
-            try
-            {
-                var skillToCreate = _mapper.Map<Skill>(skill);
-                var existis = await _repository.GetByName(skill.Name);
 
-                if (existis != null) throw new Exception(); // implement custom exception
+            var skillToCreate = _mapper.Map<Skill>(skill);
+            var existis = await _repository.GetByName(skill.Name);
 
-                var created = await _repository.Create(skillToCreate);
+            if (existis != null) return null;
 
-                return created.Id;
-            }
-            catch (Exception)
-            {
+            var created = await _repository.Create(skillToCreate);
 
-                throw;
-            }
+            return created.Id;
         }
 
         public async Task<bool> Delete(Guid id)
         {
-            try
-            {
-                var skillToDelete = await _repository.GetById(id);
 
-                if (skillToDelete == null) throw new Exception();
+            var skillToDelete = await _repository.GetById(id);
 
-                await _repository.Delete(skillToDelete);
+            if (skillToDelete == null) return false;
 
-                return true;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _repository.Delete(skillToDelete);
+
+            return true;
         }
 
         public async Task<IEnumerable<SkillModel>> GetAll()
@@ -74,38 +61,44 @@ namespace Business_Access_Layer.Services
 
         public async Task<SkillModel> GetById(Guid Id)
         {
-            try
-            {
-                var skill = await _repository.GetById(Id);
+            var skill = await _repository.GetById(Id);
 
-                if (skill == null) throw new Exception();
+            if (skill == null) return null;
 
-                var model = _mapper.Map<SkillModel>(skill);
+            var model = _mapper.Map<SkillModel>(skill);
 
-                return model;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return model;
+
         }
 
         public async Task<SkillModel> GetByName(string name)
         {
-            try
+
+            var skill = await _repository.GetByName(name);
+
+            if (skill == null) return null;
+
+            var model = _mapper.Map<SkillModel>(skill);
+
+            return model;
+
+        }
+
+        public async Task<Skill> Update(Guid id, SkillModel model)
+        {
+            var skill = await _repository.GetById(id);
+
+            if (skill == null) return null;
+
+            skill = _mapper.Map<Skill>(model) with
             {
-                var skill = await _repository.GetByName(name);
+                    Id = id
+            };
 
-                if (skill == null) throw new Exception();
+            await _repository.Update(skill);
 
-                var model = _mapper.Map<SkillModel>(skill);
-
-                return model;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return skill;
+          
         }
     }
 }

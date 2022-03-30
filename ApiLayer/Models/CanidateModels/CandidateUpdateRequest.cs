@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ApiLayer.Models
+namespace ApiLayer.Models.CandidateModels
 {
-    public record CandidateResponse
+    public record CandidateUpdateRequest
     {
         public string FullName { get; init; }
 

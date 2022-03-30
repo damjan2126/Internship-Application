@@ -1,4 +1,5 @@
-﻿using ApiLayer.Models;
+﻿using ApiLayer.Models.CandidateModels;
+using ApiLayer.Models.SkillModels;
 using AutoMapper;
 using Business_Access_Layer.Models;
 
@@ -28,6 +29,30 @@ namespace ApiLayer.Mappings
             {
                 CreateMap<CandidateUpdateRequest, CandidateModel>();
             }
+        }
+
+        public class SkillCreateRequestProfile : Profile
+        {
+            public SkillCreateRequestProfile()
+            {
+                CreateMap<SkillCreateRequest,SkillModel>();
+            }
+        }
+
+        public class SkillUpdateRequestProfile : Profile
+        {
+            public SkillUpdateRequestProfile()
+            {
+                CreateMap<SkillUpdateRequest, SkillModel>();
+            }
+        }
+
+        public class SkillResponseProfile : Profile 
+        {
+            public SkillResponseProfile()
+            {
+                CreateMap<SkillModel, SkillResponse>();
+            }    
         }
     }
 }

@@ -11,5 +11,7 @@ namespace Business_Access_Layer.Models
         public string ContactNumber { get; init; }
 
         public string Email { get; init; }
+
+
     }
 }
