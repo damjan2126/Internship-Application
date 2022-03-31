@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repos\" />
+    <Compile Remove="Repos\**" />
+    <EmbeddedResource Remove="Repos\**" />
+    <None Remove="Repos\**" />
   </ItemGroup>
 
   <ItemGroup>

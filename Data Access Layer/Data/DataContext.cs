@@ -16,41 +16,48 @@ namespace Data_Access_Layer.Data
 
         public DbSet<Skill> Skills { get; set; }
 
-
-        /*
+        public DbSet<CandidateAndSkill> CandidatesAndSkills { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            Guid SkillId = Guid.NewGuid();
+            Guid CandidateId = Guid.NewGuid();
+
             modelBuilder.Entity<Skill>().HasData(
                 new Skill
                 {
-                    Id = Guid.NewGuid(),
-                    Name = "Skill A"
+                    Id = SkillId,
+                    Name = "Skill A",
+                    Candidates = new List<Candidate>()
                 });
 
             modelBuilder.Entity<Skill>().HasData(
                 new Skill
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Skill B"
+                    Name = "Skill B",
+                    Candidates = new List<Candidate>()
                 });
 
             modelBuilder.Entity<Skill>().HasData(
                 new Skill
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Skill C"
+                    Name = "Skill C",
+                    Candidates = new List<Candidate>()
                 });
 
             modelBuilder.Entity<Candidate>().HasData(
                  new Candidate
                  {
-                     Id = Guid.NewGuid(),
+                     Id = CandidateId,
                      FullName = "John Johnson",
                      ContactNumber = "1",
                      DateOfBirth = DateTime.UtcNow,
-                     Email = "email"
+                     Email = "email",
+                     Skills = new List<Skill>()
                  }
                 );
 
@@ -61,7 +68,8 @@ namespace Data_Access_Layer.Data
                     FullName = "Jack Jackson",
                     ContactNumber = "2",
                     DateOfBirth = DateTime.UtcNow,
-                    Email = "email2"
+                    Email = "email2",
+                    Skills = new List<Skill>()
                 }
                );
 
@@ -72,10 +80,20 @@ namespace Data_Access_Layer.Data
                     FullName = "Johnny Joe",
                     ContactNumber = "3",
                     DateOfBirth = DateTime.UtcNow,
-                    Email = "email3"
+                    Email = "email3",
+                    Skills = new List<Skill>()
                 }
                );
-        } 
-        */
+
+            modelBuilder.Entity<CandidateAndSkill>().HasData(
+                new CandidateAndSkill
+                {
+                    Id = Guid.NewGuid(),
+                    SkillId = SkillId,
+                    CandidateId = CandidateId
+                }
+                );
+        }
+
     }
 }

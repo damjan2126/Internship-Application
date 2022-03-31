@@ -18,7 +18,7 @@ namespace Data_Access_Layer.Entities
 
         public string Email { get; init; }
 
-        public List<Skill>? SkillList { get; init; }
+        public List<Skill> Skills { get; init; }
 
     }
 }
