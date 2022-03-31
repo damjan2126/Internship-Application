@@ -16,10 +16,8 @@ namespace Data_Access_Layer.Data
 
         public DbSet<Skill> Skills { get; set; }
 
-        //public DbSet<CandidateSkills> CandidateSkills { get; set; }
 
-
-
+        /*
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -54,7 +52,7 @@ namespace Data_Access_Layer.Data
                      DateOfBirth = DateTime.UtcNow,
                      Email = "email"
                  }
-                ) ;
+                );
 
             modelBuilder.Entity<Candidate>().HasData(
                 new Candidate
@@ -77,6 +75,7 @@ namespace Data_Access_Layer.Data
                     Email = "email3"
                 }
                );
-        }
+        } 
+        */
     }
 }

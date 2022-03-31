@@ -10,11 +10,9 @@ namespace Data_Access_Layer.Models
 {
     public class SkillRepository : GenericRepository<Skill>, ISkillRepository
     {
-        private readonly DataContext _context;
 
         public SkillRepository(DataContext context) : base(context)
         {
-            _context = context;
         }
 
 

@@ -11,5 +11,7 @@ namespace Data_Access_Layer.Entities
         public Guid Id { get; init; }
 
         public string Name { get; init; }
+
+        public List<Candidate> Candidates { get; init; }
     }
 }
