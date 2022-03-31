@@ -48,7 +48,7 @@ namespace ApiLayer.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [HttpGet("getbyname/{name}")]
-        public async Task<IActionResult> GetByName([FromRoute] String name)
+        public async Task<IActionResult> GetByName([FromRoute] string name)
         {
             var model = await _skillService.GetByName(name);
             var skilLResponse = _mapper.Map<SkillResponse>(model);

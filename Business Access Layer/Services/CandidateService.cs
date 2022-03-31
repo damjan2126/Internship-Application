@@ -67,7 +67,7 @@ namespace Business_Access_Layer.Services
             {
                 var candidate = await _repository.GetById(id);
 
-                if (candidate == null) throw new Exception();
+                if (candidate == null) return null;
 
                 var model = _mapper.Map<CandidateModel>(candidate);
 
@@ -86,7 +86,7 @@ namespace Business_Access_Layer.Services
             {
                 var candidate = await _repository.Find(c => c.FullName.Equals(name));
 
-                if (candidate == null) throw new Exception();
+                if (candidate == null) return null;
 
                 var model = _mapper.Map<CandidateModel>(candidate);
 
@@ -104,7 +104,7 @@ namespace Business_Access_Layer.Services
             {
                 var candidate = await _repository.GetById(id);         
 
-                if (candidate == null) throw new Exception();
+                if (candidate == null) return null;
 
                 candidate = _mapper.Map<Candidate>(model) with
                 {

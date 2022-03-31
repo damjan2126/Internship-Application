@@ -47,8 +47,8 @@ namespace ApiLayer.Controllers
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [HttpGet("getbyid/{name}")]
-        public async Task<IActionResult> GetByName([FromRoute] String name)
+        [HttpGet("getbyname/{name}")]
+        public async Task<IActionResult> GetByName([FromRoute] string name)
         {
             var model = await _candidateService.GetByName(name);
             var candidateResponse = _mapper.Map<CandidateResponse>(model);
@@ -86,12 +86,7 @@ namespace ApiLayer.Controllers
             if(currentCandidate == null) return NotFound();
 
             return Ok(await _candidateService.Update(id, _mapper.Map<CandidateModel> (candidateUpdateRequest)));
-
-            
-
-
-
-            
+            //Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
         }
 
 
