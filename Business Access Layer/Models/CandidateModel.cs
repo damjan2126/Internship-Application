@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Business_Access_Layer.Models
 {
@@ -11,6 +12,8 @@ namespace Business_Access_Layer.Models
         public string ContactNumber { get; init; }
 
         public string Email { get; init; }
+
+        public IEnumerable<string>? SkillNames { get; init; }
 
 
     }

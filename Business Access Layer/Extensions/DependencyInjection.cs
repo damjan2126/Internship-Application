@@ -27,10 +27,12 @@ namespace Business_Access_Layer.Extensions
             });
 
             
-            services.AddScoped<ICandidateRepository, CandidateRepository>();
-            services.AddScoped<ICandidateService, CandidateService>();
+            services.AddScoped<Data_Access_Layer.Contracts.ICandidateRepository, CandidateRepository>();
+            services.AddScoped<Services.IServices.ICandidateService, CandidateService>();
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<ISkillService, SkillService>();
+            services.AddScoped<ICandidateAndSkillRepository, CandidateAndSkillRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }

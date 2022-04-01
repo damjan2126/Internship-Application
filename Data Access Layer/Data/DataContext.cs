@@ -12,11 +12,11 @@ namespace Data_Access_Layer.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<Candidate> Candidates { get; set; }
+        public virtual DbSet<Candidate> Candidates { get; set; }
 
-        public DbSet<Skill> Skills { get; set; }
+        public virtual DbSet<Skill> Skills { get; set; }
 
-        public DbSet<CandidateAndSkill> CandidatesAndSkills { get; set; }
+        public virtual DbSet<CandidateAndSkill> CandidatesAndSkills { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

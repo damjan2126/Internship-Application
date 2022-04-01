@@ -9,5 +9,7 @@ namespace Business_Access_Layer.Models
     public record SkillModel
     {
         public string Name { get; init; }
+
+        public List<Guid>? CandidateGuids { get; init; }
     }
 }

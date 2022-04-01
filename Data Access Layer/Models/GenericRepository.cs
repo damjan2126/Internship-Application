@@ -29,7 +29,7 @@ namespace Data_Access_Layer.Models
 
         public async Task<int> Delete(T entity)
         {
-            var deletedEntry = _context.Remove(entity);
+            var deletedEntry = _context.Set<T>().Remove(entity);
             return await _context.SaveChangesAsync();
         }
 

@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace Business_Access_Layer.Services
 {
-    public class CandidateService : ICandidateService
+    public class CandidateService : IServices.ICandidateService
     {
-        private readonly ICandidateRepository _repository;
+        private readonly Data_Access_Layer.Contracts.ICandidateRepository _repository;
         private readonly IMapper _mapper;
 
         public CandidateService()
         {
         }
 
-        public CandidateService(ICandidateRepository repository, IMapper mapper)
+        public CandidateService(Data_Access_Layer.Contracts.ICandidateRepository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

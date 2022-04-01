@@ -9,6 +9,12 @@ namespace Data_Access_Layer.Contracts
     public interface IUnitOfWork : IDisposable
     {
         ICandidateRepository Candidates { get; }
-        ISkillRepository Skill { get; }
+
+        ISkillRepository Skills { get; }
+
+        ICandidateAndSkillRepository CandidatesAndSkills { get;  }
+
+        Task SaveChanges();
+
     }
 }
