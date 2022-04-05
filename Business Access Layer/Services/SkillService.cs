@@ -22,23 +22,23 @@ namespace Business_Access_Layer.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Guid?> Create(SkillModel skill)
+        public async Task<Guid?> Create(SkillModel model)
         {
         
-            var existis = await _unitOfWork.Skills.Find(c => c.Name.Equals(skill.Name));
+            var existis = await _unitOfWork.Skills.Find(c => c.Name.Equals(model.Name));
             if (existis != null) return null;
 
-            var skillToCreate = _mapper.Map<Skill>(skill);
+            var skillToCreate = _mapper.Map<Skill>(model);
 
             var created = await _unitOfWork.Skills.Create(skillToCreate);
 
-            if (skill.CandidateGuids.Count == 0)
+            if (model.CandidateGuids.Count == 0)
             {
                 await _unitOfWork.SaveChanges();
                 return created.Id;
             } 
 
-            foreach(var candidateGuid in skill.CandidateGuids)
+            foreach(var candidateGuid in model.CandidateGuids)
             {
                 await _unitOfWork.CandidatesAndSkills.Create(new CandidateAndSkill()
                 {

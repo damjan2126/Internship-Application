@@ -24,5 +24,19 @@ namespace Business_Access_Layer.Extensions
 
             return candidateGuids;
         }
+
+        internal static async Task<IEnumerable<Guid>> GetSkillGuids(Guid candidateId, IUnitOfWork _unitOfWork)
+        {
+            var candidatesAndSkills = new List<CandidateAndSkill>(await _unitOfWork.CandidatesAndSkills.FindAll(cs => cs.CandidateId == candidateId));
+
+            List<Guid> skillGuids = new();
+
+            foreach (var candidateAndSkill in candidatesAndSkills)
+            {
+                skillGuids.Add(candidateAndSkill.SkillId);
+            }
+
+            return skillGuids;
+        }
     }
 }

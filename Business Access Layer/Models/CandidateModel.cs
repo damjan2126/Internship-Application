@@ -13,7 +13,7 @@ namespace Business_Access_Layer.Models
 
         public string Email { get; init; }
 
-        public IEnumerable<string>? SkillNames { get; init; }
+        public List<Guid>? SkillGuids { get; init; }
 
 
     }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Business_Access_Layer.Extensions;
 using Business_Access_Layer.Models;
 using Business_Access_Layer.Services.IServices;
 using Data_Access_Layer.Contracts;
@@ -9,116 +10,175 @@ using System.Threading.Tasks;
 
 namespace Business_Access_Layer.Services
 {
-    public class CandidateService : IServices.ICandidateService
+    public class CandidateService : ICandidateService
     {
-        private readonly Data_Access_Layer.Contracts.ICandidateRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public CandidateService()
         {
         }
 
-        public CandidateService(Data_Access_Layer.Contracts.ICandidateRepository repository, IMapper mapper)
+        public CandidateService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task<Guid?> Create(CandidateModel model)
         {
-            var candidate = _mapper.Map<Candidate>(model);
-            var existis = await _repository.Find(c => c.Email.Equals(model.Email));
 
+            var existis = await _unitOfWork.Candidates.Find(c => c.Email.Equals(model.FullName)); ;
             if (existis != null) return null;
 
-            var created = await _repository.Create(candidate);
+            var candidateToCreate = _mapper.Map<Candidate>(model);
+
+            var created = await _unitOfWork.Candidates.Create(candidateToCreate);
+
+            if (model.SkillGuids.Count == 0)
+            {
+                await _unitOfWork.SaveChanges();
+                return created.Id;
+            }
+
+            foreach (var skillGuid in model.SkillGuids)
+            {
+                await _unitOfWork.CandidatesAndSkills.Create(new CandidateAndSkill()
+                {
+                    Id = Guid.NewGuid(),
+                    CandidateId = created.Id,
+                    SkillId = skillGuid
+                });
+            }
+
+            await _unitOfWork.SaveChanges();
 
             return created.Id;
         }
 
         public async Task<bool> Delete(Guid id)
         {
-            var candidate = await _repository.GetById(id);
+            var candidateToDelete = await _unitOfWork.Candidates.GetById(id);
 
-            if(candidate == null) return false;
+            if (candidateToDelete == null) return false;
 
-            await _repository.Delete(candidate);
+            var candidatesAndSkills = new List<CandidateAndSkill>(await _unitOfWork.CandidatesAndSkills.FindAll(cs => cs.CandidateId == id));
+
+            foreach (var CandidateAndSkillSingle in candidatesAndSkills)
+            {
+                await _unitOfWork.CandidatesAndSkills.Delete(CandidateAndSkillSingle);
+            }
+
+            await _unitOfWork.Candidates.Delete(candidateToDelete);
+
+            await _unitOfWork.SaveChanges();
 
             return true;
         }
 
         public async Task<IEnumerable<CandidateModel>> GetAll()
         {
-            var candidates = await _repository.GetAll();
+            var candidates = await _unitOfWork.Candidates.GetAll();
 
-            List<CandidateModel> result = new List<CandidateModel>();
+            var result = new List<CandidateModel>();
 
-            foreach(var candidate in candidates)
+            foreach (var candidate in candidates)
             {
-                result.Add((CandidateModel)_mapper.Map<CandidateModel>(candidate));
+                List<Guid> skillGuids = new(await GuidGetter.GetSkillGuids(candidate.Id, _unitOfWork));
+
+                result.Add(_mapper.Map<CandidateModel>(candidate) with
+                {
+                    SkillGuids = skillGuids
+                });
             }
             return result;
-            
+
         }
 
         public async Task<CandidateModel> GetById(Guid id)
         {
-            try
+            var candidate = await _unitOfWork.Candidates.GetById(id);
+
+            if (candidate == null) return null;
+
+            List<Guid> SkillGuids = new(await GuidGetter.GetSkillGuids(id, _unitOfWork));
+
+            var model = _mapper.Map<CandidateModel>(candidate) with
             {
-                var candidate = await _repository.GetById(id);
+               SkillGuids = SkillGuids
+            };
 
-                if (candidate == null) return null;
-
-                var model = _mapper.Map<CandidateModel>(candidate);
-
-                return model;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return model;
 
         }
 
         public async Task<CandidateModel> GetByName(string name)
         {
-            try
+            var candidate = await _unitOfWork.Candidates.Find(c => c.FullName.Equals(name));
+
+            if (candidate == null) return null;
+
+            List<Guid> SkillGuids = new(await GuidGetter.GetSkillGuids(candidate.Id, _unitOfWork));
+
+            var model = _mapper.Map<CandidateModel>(candidate) with
             {
-                var candidate = await _repository.Find(c => c.FullName.Equals(name));
+                SkillGuids = SkillGuids
+            };
 
-                if (candidate == null) return null;
-
-                var model = _mapper.Map<CandidateModel>(candidate);
-
-                return model;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return model;
         }
 
         public async Task<Candidate> Update(Guid id, CandidateModel model)
         {
-            try
+            var candidate = await _unitOfWork.Candidates.GetById(id);
+
+            if (candidate == null) return null;
+
+            candidate = _mapper.Map<Candidate>(model) with
             {
-                var candidate = await _repository.GetById(id);         
+                Id = id
+            };
 
-                if (candidate == null) return null;
+            if (model.SkillGuids != null)
+            {
+                var candidatesAndSkills = new List<CandidateAndSkill>(await _unitOfWork.CandidatesAndSkills.FindAll(cs => cs.CandidateId == id));
 
-                candidate = _mapper.Map<Candidate>(model) with
+                int skillGuidCount = model.SkillGuids.Count - 1;
+
+                foreach (var candidateAndSkill in candidatesAndSkills)
                 {
-                    Id = id
-                };
+                    if (skillGuidCount > -1)
+                    {
+                        CandidateAndSkill toUpdate = candidateAndSkill with
+                        {
+                            SkillId = model.SkillGuids[skillGuidCount--]
+                        };
 
-                await _repository.Update(candidate, id);
+                        await _unitOfWork.CandidatesAndSkills.Update(toUpdate, toUpdate.Id);
+                    }
+                }
 
-                return candidate;
+                if (skillGuidCount != -1)
+                {
+                    for (int i = skillGuidCount; i > -1; i--)
+                    {
+                        CandidateAndSkill candidateAndSkill = new()
+                        {
+                            Id = Guid.NewGuid(),
+                            SkillId = model.SkillGuids[i],
+                            CandidateId = id
+                        };
+
+                        await _unitOfWork.CandidatesAndSkills.Create(candidateAndSkill);
+                    }
+                }
             }
-            catch (Exception)
-            {
-                throw;
-            }
+
+            await _unitOfWork.Candidates.Update(candidate, id);
+
+            await _unitOfWork.SaveChanges();
+
+            return candidate;
         }
     }
 }
